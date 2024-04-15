@@ -1,0 +1,15 @@
+# Use root/example as user/password credentials
+version: '3'
+name: mypost
+services:
+  mongo:
+    container_name: db-mongo
+    image: mongo:7
+    ports:
+      - '27027:27017'
+    restart: on-failure
+    expose:
+      - 27027
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: admin123
