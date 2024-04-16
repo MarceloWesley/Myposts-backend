@@ -18,7 +18,6 @@ import { ModulesModule } from './modules';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
         const uri = configService.getOrThrow('DB_URI');
-        console.log(uri);
         return {
           uri,
         };
