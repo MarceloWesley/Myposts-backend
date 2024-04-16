@@ -10,5 +10,3 @@ export class DecodeBase64Pipe implements PipeTransform {
     return JSON.parse(decoded);
   }
 }
-// const logger = new Logger('Valor');
-// logger.debug(value);

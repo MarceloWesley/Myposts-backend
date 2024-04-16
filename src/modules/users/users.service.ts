@@ -1,4 +1,4 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDTO } from './dto/create-user.dto';
 import { UpdateUserDTO } from './dto/update-user.dto';
 import { User } from './entities';
@@ -56,8 +56,6 @@ export class UsersService {
       skip: (page - 1) * size,
       sort,
     };
-    const logger = new Logger();
-    logger.debug({ options });
 
     if (username) query.username = new RegExp(`${username}`, 'gi');
     if (email) query.email = new RegExp(`${email}`, 'gi');
@@ -81,8 +79,8 @@ export class UsersService {
     return user;
   }
 
-  async findOneByEmail(email: string) {
-    const user = await this.userModel.findOne({ email });
+  async findOneByEmail(email: string, options: object = { password: 0 }) {
+    const user = await this.userModel.findOne({ email }, options);
 
     if (!user) throw new NotFoundException();
 

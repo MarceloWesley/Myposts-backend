@@ -8,6 +8,7 @@ import {
   Delete,
   Query,
   Logger,
+  UseGuards,
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDTO } from './dto/create-post.dto';
@@ -16,6 +17,7 @@ import { PaginationOptionsDTO } from 'src/shared/dtos';
 import { SortPostDTO } from './dto';
 import { PostsSortValidationPipe } from './pipes/posts-sort-validation.pipe';
 import { DecodeBase64Pipe } from 'src/shared/pipes/decode-base64.pipe';
+import { AuthGuard } from '../auth/auth.guard';
 
 @Controller('posts')
 export class PostsController {
@@ -28,6 +30,7 @@ export class PostsController {
   }
 
   @Get()
+  @UseGuards(AuthGuard)
   findAll(
     @Query() pagination: PaginationOptionsDTO,
     @Query('sort', new PostsSortValidationPipe()) sort: SortPostDTO,
@@ -37,6 +40,7 @@ export class PostsController {
   }
 
   @Get(':id')
+  @UseGuards(AuthGuard)
   findOne(
     @Param('id') id: string,
     @Query('select', new DecodeBase64Pipe()) select: any,
@@ -45,11 +49,13 @@ export class PostsController {
   }
 
   @Patch(':id')
+  @UseGuards(AuthGuard)
   update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDTO) {
     return this.postsService.updateOneById(id, updatePostDto);
   }
 
   @Delete(':id')
+  @UseGuards(AuthGuard)
   remove(@Param('id') id: string) {
     return this.postsService.deleteOneById(id);
   }

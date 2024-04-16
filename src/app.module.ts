@@ -3,10 +3,6 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CONNECTION_NAME_MAIN } from './shared/database';
 import { MongooseModule } from '@nestjs/mongoose';
-// import { UsersModule } from './modules/users/users.module';
-// import { PostsModule } from './modules/posts/posts.module';
-// import { CommentsModule } from './modules/comments/comments.module';
-// import { AuthModule } from './modules/auth/auth.module';
 import { ModulesModule } from './modules';
 
 @Module({

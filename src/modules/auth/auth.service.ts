@@ -14,7 +14,10 @@ export class AuthService {
   ) {}
 
   public async signIn({ email, password }: SignInDTO) {
-    const user = await this.usersService.findOneByEmail(email);
+    const options = {
+      password: 1,
+    };
+    const user = await this.usersService.findOneByEmail(email, options);
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
@@ -24,6 +27,6 @@ export class AuthService {
 
     const expiresIn = this.configService.get('JWT_EXPIRES_IN');
     const token = await this.jwtService.signAsync(payload, { expiresIn });
-    return { token };
+    return token;
   }
 }

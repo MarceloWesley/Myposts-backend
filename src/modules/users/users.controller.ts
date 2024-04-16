@@ -41,6 +41,7 @@ export class UsersController {
     return this.usersService.findAll({ filter, pagination, sort });
   }
 
+  @UseGuards(AuthGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.usersService.findOneById(id);
@@ -51,11 +52,13 @@ export class UsersController {
     return this.usersService.findOneByEmail(email);
   }
 
+  @UseGuards(AuthGuard)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDTO) {
     return this.usersService.updateOneById(id, updateUserDto);
   }
 
+  @UseGuards(AuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.usersService.deleteOneById(id);
