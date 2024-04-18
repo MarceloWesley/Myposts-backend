@@ -48,6 +48,7 @@ export class UsersController {
   }
 
   @Get('email/:email')
+  @UseGuards(AuthGuard)
   findOneByEmail(@Param('email') email: string) {
     return this.usersService.findOneByEmail(email);
   }
