@@ -62,7 +62,7 @@ export class AuthService {
         { email, code },
       );
     } catch (error) {
-      const errorMessage = error.message || 'An unknown error occurred.'; // Provide a default message
+      const errorMessage = error.message || 'An unknown error occurred.';
       throw new Error(errorMessage);
     }
   }
