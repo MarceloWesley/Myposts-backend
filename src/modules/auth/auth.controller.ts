@@ -22,4 +22,9 @@ export class AuthController {
 
     return { token };
   }
+
+  @Post('email')
+  resetPassword(@Body('email') email: string) {
+    return this.authService.resetPassword({ email });
+  }
 }
