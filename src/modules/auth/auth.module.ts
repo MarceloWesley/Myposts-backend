@@ -5,7 +5,7 @@ import { UsersModule } from '../users/users.module';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { HttpModule } from '@nestjs/axios';
-import { RedisModule } from '../redis/redis.module';
+import { RedisModule } from '../redis-module/redis.module';
 
 @Module({
   imports: [
