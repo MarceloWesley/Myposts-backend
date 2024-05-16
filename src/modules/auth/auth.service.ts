@@ -12,7 +12,7 @@ import { ResetPasswordDTO } from './dto/reset-password.dto';
 import { HttpService } from '@nestjs/axios';
 
 import { generateCode } from 'src/shared/utils/generate-code';
-import { RedisService } from '../redis/redis.service';
+import { RedisService } from '../redis-module/redis.service';
 
 @Injectable()
 export class AuthService {
