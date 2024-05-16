@@ -4,8 +4,9 @@ import { AuthModule } from './auth';
 import { UsersModule } from './users';
 import { PostsModule } from './posts/posts.module';
 import { CommentsModule } from './comments/comments.module';
+import { RedisModule } from './redis/redis.module';
 
 @Module({
-  imports: [UsersModule, AuthModule, PostsModule, CommentsModule],
+  imports: [UsersModule, AuthModule, PostsModule, CommentsModule, RedisModule],
 })
 export class ModulesModule {}
