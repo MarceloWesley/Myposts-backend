@@ -42,7 +42,6 @@ export class PostsService {
 
     const data = await this.postModel.find(query, {}, options).populate({
       path: 'user',
-      // select: '-password -createdAt -updatedAt',
       select,
     });
 
