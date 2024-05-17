@@ -58,7 +58,7 @@ export class AuthService {
 
     try {
       await this.httpService.axiosRef.post(
-        'http://localhost:3000/reset-password/',
+        `${process.env.SERVICE_EMAIL_URI}/reset-password/`,
         { email, code },
       );
     } catch (error) {
