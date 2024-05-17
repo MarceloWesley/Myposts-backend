@@ -66,4 +66,31 @@ export class AuthService {
       throw new Error(errorMessage);
     }
   }
+
+  public async changePassword({ password, confirmPassword, code, email }) {
+    const user = await this.usersService.findOneByEmail(email);
+    const redisUser: any = await this.redisService.get(
+      `verification-code-${email}`,
+    );
+    const data = JSON.parse(redisUser);
+
+    const isPasswordMatch = password === confirmPassword;
+    const isCodeMatch = code === data.code;
+
+    if (!isPasswordMatch) {
+      throw new Error('passwords must be the same');
+    }
+
+    if (!isCodeMatch) {
+      throw new Error('Invalid Code');
+    }
+    try {
+      const updatedUser = await this.usersService.updateOneById(user.id, {
+        password,
+      });
+      return updatedUser;
+    } catch (error) {
+      return { error };
+    }
+  }
 }

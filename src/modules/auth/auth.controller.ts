@@ -7,7 +7,7 @@ import {
   Session,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { SignInDTO } from './dto';
+import { ChangePasswordDTO, SignInDTO } from './dto';
 
 @Controller('auth')
 export class AuthController {
@@ -26,5 +26,10 @@ export class AuthController {
   @Post('email')
   resetPassword(@Body('email') email: string) {
     return this.authService.resetPassword({ email });
+  }
+
+  @Post('change-password')
+  changePassword(@Body() changePasswordDto: ChangePasswordDTO) {
+    return this.authService.changePassword(changePasswordDto);
   }
 }
