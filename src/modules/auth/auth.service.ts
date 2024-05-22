@@ -57,10 +57,18 @@ export class AuthService {
     );
 
     try {
-      await this.httpService.axiosRef.post(
+      const response = await this.httpService.axiosRef.post(
         `${process.env.SERVICE_EMAIL_URI}/reset-password/`,
         { email, code },
       );
+
+      const responseData = {
+        status: response.status,
+        statusText: response.statusText,
+        data: response.data,
+      };
+
+      return responseData;
     } catch (error) {
       const errorMessage = error.message || 'An unknown error occurred.';
       throw new Error(errorMessage);
