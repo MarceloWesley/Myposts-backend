@@ -1,11 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-import {
-  IsEmail,
-  IsStrongPassword,
-  MaxLength,
-  MinLength,
-} from 'class-validator';
+import { IsEmail, MaxLength, MinLength } from 'class-validator';
 import { User } from 'src/modules/users/entities';
 
 type AuthSignInDTO = Pick<User, 'email' | 'password'>;
@@ -30,6 +25,5 @@ export class SignInDTO implements AuthSignInDTO {
   })
   @MinLength(6)
   @MaxLength(256)
-  @IsStrongPassword()
   public password: string;
 }
