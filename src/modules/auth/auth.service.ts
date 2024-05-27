@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  NotFoundException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
@@ -33,8 +29,9 @@ export class AuthService {
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('Incorrect password');
     }
+
     const payload = { email, username: user.username, id: user.id };
 
     const expiresIn = this.configService.get('JWT_EXPIRES_IN');
@@ -43,11 +40,7 @@ export class AuthService {
   }
 
   public async resetPassword({ email }: ResetPasswordDTO) {
-    const user = await this.usersService.findOneByEmail(email);
-
-    if (!user) {
-      throw new NotFoundException();
-    }
+    await this.usersService.findOneByEmail(email);
 
     const code = generateCode(6);
     await this.redisService.save(
