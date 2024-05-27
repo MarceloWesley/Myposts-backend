@@ -86,11 +86,11 @@ export class AuthService {
     const isCodeMatch = code === data.code;
 
     if (!isPasswordMatch) {
-      throw new Error('passwords must be the same');
+      throw new UnauthorizedException('passwords do not match');
     }
 
     if (!isCodeMatch) {
-      throw new Error('Invalid Code');
+      throw new UnauthorizedException('Invalid code');
     }
     try {
       const updatedUser = await this.usersService.updateOneById(user.id, {
