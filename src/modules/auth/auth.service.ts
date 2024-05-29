@@ -23,9 +23,9 @@ export class AuthService {
   public async signIn({ email, password }: SignInDTO) {
     const options = {
       password: 1,
+      username: 1,
     };
     const user = await this.usersService.findOneByEmail(email, options);
-
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
