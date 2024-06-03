@@ -26,4 +26,9 @@ export class RedisService {
   get(key: string) {
     return this.redisClient.get(key);
   }
+
+  async delete(key: string) {
+    const deleted = await this.redisClient.del(key);
+    return deleted === 1; // Return true if the key was deleted, false otherwise
+  }
 }
