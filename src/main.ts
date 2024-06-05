@@ -57,7 +57,6 @@ async function bootstrap() {
       saveUninitialized: false,
       cookie: {
         httpOnly: true,
-        path: '/',
         maxAge: +configService.getOrThrow('SESSION_EXPIRES'),
       },
     }),

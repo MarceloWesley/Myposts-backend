@@ -6,10 +6,12 @@ import {
   HttpStatus,
   Session,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ChangePasswordDTO, SignInDTO } from './dto';
 import { SessionData } from 'express-session';
+import { AuthGuard } from './auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -25,6 +27,7 @@ export class AuthController {
     return { token };
   }
 
+  @UseGuards(AuthGuard)
   @Delete('logout')
   async logout(@Session() session: SessionData) {
     return new Promise<void>((resolve) => {
