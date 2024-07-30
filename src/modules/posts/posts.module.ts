@@ -4,14 +4,16 @@ import { PostsController } from './posts.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { PostDefinition } from './entities';
 import { CONNECTION_NAME_MAIN } from 'src/shared/database';
-import { UsersModule } from '../users/users.module';
+import { CommentsModule } from '../comments/comments.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([PostDefinition], CONNECTION_NAME_MAIN),
-    UsersModule,
+
+    CommentsModule,
   ],
   controllers: [PostsController],
   providers: [PostsService],
+  exports: [PostsService],
 })
 export class PostsModule {}

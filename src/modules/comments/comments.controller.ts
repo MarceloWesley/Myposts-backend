@@ -22,7 +22,6 @@ export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}
 
   @Post()
-  @UseGuards(AuthGuard)
   create(@Body() createCommentDto: CreateCommentDTO) {
     return this.commentsService.create(createCommentDto);
   }

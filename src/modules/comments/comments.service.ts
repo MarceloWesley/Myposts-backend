@@ -5,6 +5,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { CONNECTION_NAME_MAIN } from 'src/shared/database';
 import { FilterQuery, Model, QueryOptions } from 'mongoose';
 import { Comment } from './entities/comment.entity';
+
 import {
   PaginationDTO,
   PaginationMetaDTO,
@@ -74,6 +75,12 @@ export class CommentsService {
     return comment;
   }
 
+  async findCommentsByPostId(query: any, options: any) {
+    const comments = await this.commentModel.find(query, {}, options);
+    if (!comments) throw new NotFoundException();
+    return comments;
+  }
+
   async updateOneById(id: string, updateCommentDto: UpdateCommentDTO) {
     if (!id) throw new NotFoundException();
 
@@ -102,5 +109,15 @@ export class CommentsService {
     };
 
     return this.commentModel.findByIdAndDelete(id, options);
+  }
+
+  async findCommentsByUserId(query: any, options: any) {
+    const usersComments = await this.commentModel.find(query, {}, options);
+    return usersComments;
+  }
+
+  countDocuments(query: any) {
+    const total = this.commentModel.countDocuments(query);
+    return total;
   }
 }
