@@ -48,6 +48,16 @@ export class PostsController {
     return this.postsService.findOneById(id, select);
   }
 
+  @Get('/:id/comments')
+  @UseGuards(AuthGuard)
+  findOneCommentsByPost(
+    @Param('id') id: string,
+    @Query() pagination: PaginationOptionsDTO,
+    @Query('sort', new PostsSortValidationPipe()) sort: SortPostDTO,
+  ) {
+    return this.postsService.findCommentsByPostId(id, { pagination, sort });
+  }
+
   @Patch(':id')
   @UseGuards(AuthGuard)
   update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDTO) {

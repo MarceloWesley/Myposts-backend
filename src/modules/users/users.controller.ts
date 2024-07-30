@@ -20,7 +20,9 @@ import { FindUserDTO } from './dto/find-user.dto';
 import { UsersSortValidationPipe } from './pipes';
 import { CreateUserDTO, SortUserDTO } from './dto';
 import { AuthGuard } from '../auth/auth.guard';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Users')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -57,6 +59,32 @@ export class UsersController {
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDTO) {
     return this.usersService.updateOneById(id, updateUserDto);
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('/:id/stats')
+  findOneUserStats(@Param('id') id: string) {
+    return this.usersService.findUserStats(id);
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('/:id/posts')
+  findPostsByUser(
+    @Param('id') id: string,
+    @Query() pagination: PaginationOptionsDTO,
+    @Query('sort', new UsersSortValidationPipe()) sort: SortUserDTO,
+  ) {
+    return this.usersService.findPostsByUser(id, { pagination, sort });
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('/:id/comments')
+  findCommentsByUser(
+    @Param('id') id: string,
+    @Query() pagination: PaginationOptionsDTO,
+    @Query('sort', new UsersSortValidationPipe()) sort: SortUserDTO,
+  ) {
+    return this.usersService.findCommentsByUser(id, { pagination, sort });
   }
 
   @UseGuards(AuthGuard)

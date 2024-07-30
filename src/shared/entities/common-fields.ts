@@ -5,4 +5,9 @@ export class CommonFields {
     type: Date,
   })
   public deletedAt?: Date;
+
+  @Prop({
+    type: Date,
+  })
+  public createdAt?: Date;
 }

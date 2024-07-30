@@ -24,15 +24,22 @@ export class AuthService {
     const options = {
       password: 1,
       username: 1,
+      createdAt: 1,
     };
     const user = await this.usersService.findOneByEmail(email, options);
+
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
       throw new UnauthorizedException('Incorrect password');
     }
 
-    const payload = { email, username: user.username, id: user.id };
+    const payload = {
+      email,
+      username: user.username,
+      id: user.id,
+      createdAt: user.createdAt,
+    };
 
     const expiresIn = this.configService.get('JWT_EXPIRES_IN');
     const token = await this.jwtService.signAsync(payload, { expiresIn });

@@ -12,12 +12,18 @@ import {
   PaginationMetaDTO,
   PaginationOptionsDTO,
 } from 'src/shared/dtos';
+import { CommentsService } from '../comments/comments.service';
+import { PostsService } from '../posts/posts.service';
+import { SortPostDTO } from '../posts/dto';
+import { Post } from '../posts/entities';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectModel(User.name, CONNECTION_NAME_MAIN)
     private readonly userModel: Model<User>,
+    private readonly commentsService: CommentsService,
+    private readonly postsService: PostsService,
   ) {}
 
   private async hashPassword(password: string) {
@@ -109,6 +115,94 @@ export class UsersService {
       options,
     );
     return updatedUser;
+  }
+
+  async findUserStats(id: string) {
+    const query: FilterQuery<Post> = { user: id };
+
+    const options = {};
+    const postCount = await this.postsService.findPostsByUserId(query, options);
+    const commentsCount = await this.commentsService.findCommentsByUserId(
+      query,
+      options,
+    );
+
+    if (!postCount || !commentsCount)
+      throw new NotFoundException(
+        'Error when searching for the number of user comments and posts',
+      );
+
+    const stats = {
+      id,
+      postsQtd: postCount.length,
+      commentsQtd: commentsCount.length,
+    };
+    return stats;
+  }
+
+  async findPostsByUser(
+    id: string,
+    {
+      pagination: { page, size },
+      sort = {},
+    }: {
+      pagination: PaginationOptionsDTO;
+      sort: SortPostDTO;
+    },
+  ) {
+    const query: FilterQuery<Post> = { user: id };
+    const options: QueryOptions<Post> = {
+      limit: size,
+      skip: (page - 1) * size,
+      sort,
+    };
+
+    const total = await this.postsService.countDocuments(query);
+    const data = await this.postsService.findPostsByUserId(query, options);
+
+    if (!data) {
+      throw new NotFoundException('Error when searching for user posts');
+    }
+
+    const meta = new PaginationMetaDTO({ page, size, total });
+
+    const pagination = new PaginationDTO(data, meta);
+
+    return pagination;
+  }
+
+  async findCommentsByUser(
+    id: string,
+    {
+      pagination: { page, size },
+      sort = {},
+    }: {
+      pagination: PaginationOptionsDTO;
+      sort: SortPostDTO;
+    },
+  ) {
+    const query: FilterQuery<Comment> = { user: id };
+    const options: QueryOptions<Comment> = {
+      limit: size,
+      skip: (page - 1) * size,
+      sort,
+    };
+
+    const total = await this.postsService.countDocuments(query);
+    const data = await this.commentsService.findCommentsByUserId(
+      query,
+      options,
+    );
+
+    if (!data) {
+      throw new NotFoundException('Error when searching for user Comments');
+    }
+
+    const meta = new PaginationMetaDTO({ page, size, total });
+
+    const pagination = new PaginationDTO(data, meta);
+
+    return pagination;
   }
 
   deleteOneById(id: string) {
